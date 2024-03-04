@@ -19,15 +19,5 @@ namespace DataGathering.Api.Persistence
         {
             throw new NotImplementedException();
         }
-
-        public void Update(T student)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<T> UpdateRange(IEnumerable<T> entities)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
