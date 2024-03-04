@@ -1,5 +1,6 @@
 ﻿using Carter;
 using DataGathering.Api.Entities;
+using DataGathering.Api.Persistence;
 using Domain.Shared;
 using FluentValidation;
 using MediatR;
@@ -24,10 +25,12 @@ public static class CreateRecord
     internal sealed class Handler : IRequestHandler<Command, Result<Guid>>
     {
         private readonly IValidator<Command> _validator;
+        private readonly IRepository<Record> _repository;
 
-        public Handler(IValidator<Command> validator)
+        public Handler(IValidator<Command> validator, IRepository<Record> repository)
         {
             _validator = validator;
+            _repository = repository;
         }
 
         public async Task<Result<Guid>> Handle(Command request, CancellationToken cancellationToken)
@@ -46,12 +49,11 @@ public static class CreateRecord
                 Data = request.Data,
             };
 
-            // TODO: add to db
+            await _repository.AddAsync(record);
 
             return record.Id;
         }
     }
-
 }
 
 public class CreateRecordEndpoint : ICarterModule

@@ -1,7 +1,10 @@
 ﻿using Carter;
 using DataGathering.Api.Contracts;
+using DataGathering.Api.Entities;
 using DataGathering.Api.Features.Records;
+using DataGathering.Api.Persistence;
 using Domain.Shared;
+using Mapster;
 using MediatR;
 
 namespace DataGathering.Api.Features.Records
@@ -15,15 +18,18 @@ namespace DataGathering.Api.Features.Records
 
         internal sealed class Handler : IRequestHandler<Query, Result<RecordResponse>>
         {
+            private readonly IRepository<Record> _repository;
+
+            public Handler(IRepository<Record> repository)
+            {
+                _repository = repository;
+            }
+
             public async Task<Result<RecordResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-                // TODO: get from db
+                var record = await _repository.TryGetByIdAsync(request.Id, cancellationToken);
 
-                return new RecordResponse
-                {
-                    Id = Guid.NewGuid(),
-                    Data = Enumerable.Empty<int>()
-                };
+                return record.Adapt<RecordResponse>();
             }
         }
     }
