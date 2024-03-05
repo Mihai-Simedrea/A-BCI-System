@@ -2,6 +2,6 @@
 {
     public sealed class Record : BaseEntity
     {
-        public required IEnumerable<int> Data { get; set; }
+        public IEnumerable<int> Data { get; set; }
     }
 }
